@@ -3,12 +3,9 @@ import axios from 'axios';
 import {
   DISPLAY_ALERT,
   CLEAR_ALERT,
-  REGISTER_USER_BEGIN,
-  REGISTER_USER_ERROR,
-  REGISTER_USER_SUCCESS,
-  LOGIN_USER_BEGIN,
-  LOGIN_USER_ERROR,
-  LOGIN_USER_SUCCESS,
+  SETUP_USER_BEGIN,
+  SETUP_USER_ERROR,
+  SETUP_USER_SUCCESS,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
   UPDATE_USER_BEGIN,
@@ -23,6 +20,7 @@ import {
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
   DELETE_JOB_BEGIN,
+  DELETE_JOB_ERROR,
   EDIT_JOB_BEGIN,
   EDIT_JOB_ERROR,
   EDIT_JOB_SUCCESS,
@@ -99,61 +97,27 @@ const AppProvider = ({ children }) => {
     }, 3000);
   };
 
-  const registerUser = async (currentUser) => {
-    dispatch({ type: REGISTER_USER_BEGIN });
+  const setupUser = async ({ currentUser, endPoint, alertText }) => {
+    dispatch({ type: SETUP_USER_BEGIN });
     try {
-      const response = await axios.post('/api/v1/auth/register', currentUser);
+      const { data } = await axios.post(
+        `/api/v1/auth/${endPoint}`,
+        currentUser
+      );
 
-      const { user, location } = response.data;
-      dispatch({
-        type: REGISTER_USER_SUCCESS,
-        payload: {
-          user,
-          location
-        }
-      });
-    } catch (error) {
-      if (error.response.status === 429) {
-        dispatch({
-          type: REGISTER_USER_ERROR,
-          payload: { msg: 'Too many requests, please try later' }
-        });
-      }
-      dispatch({
-        type: REGISTER_USER_ERROR,
-        payload: { msg: error.response.data.msg }
-      });
-    }
-    clearAlert();
-  };
-
-  const loginUser = async (currentUser) => {
-    dispatch({ type: LOGIN_USER_BEGIN });
-    try {
-      const { data } = await axios.post('/api/v1/auth/login', currentUser);
       const { user, location } = data;
       dispatch({
-        type: LOGIN_USER_SUCCESS,
-        payload: {
-          user,
-          location
-        }
+        type: SETUP_USER_SUCCESS,
+        payload: { user, location, alertText }
       });
     } catch (error) {
-      if (error.response.status === 429) {
-        dispatch({
-          type: REGISTER_USER_ERROR,
-          payload: { msg: 'Too many requests, please try later' }
-        });
-      }
       dispatch({
-        type: LOGIN_USER_ERROR,
+        type: SETUP_USER_ERROR,
         payload: { msg: error.response.data.msg }
       });
     }
     clearAlert();
   };
-
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
@@ -277,8 +241,13 @@ const AppProvider = ({ children }) => {
       await authFetch.delete(`/jobs/${jobId}`);
       getJobs();
     } catch (error) {
-      logoutUser();
+      if (error.response.status === 401) return;
+      dispatch({
+        type: DELETE_JOB_ERROR,
+        payload: { msg: error.response.data.msg }
+      });
     }
+    clearAlert();
   };
 
   const showStats = async () => {
@@ -327,8 +296,7 @@ const AppProvider = ({ children }) => {
       value={{
         ...state,
         displayAlert,
-        registerUser,
-        loginUser,
+        setupUser,
         toggleSidebar,
         logoutUser,
         updateUser,

@@ -16,7 +16,7 @@ const Register = () => {
 
   const [values, setValues] = useState(initialState);
 
-  const { user, isLoading, showAlert, displayAlert, registerUser, loginUser } =
+  const { user, isLoading, showAlert, displayAlert, setupUser } =
     useAppContext();
 
   const toggleMember = () => {
@@ -37,9 +37,17 @@ const Register = () => {
     }
     const currentUser = { name, email, password };
     if (isMember) {
-      loginUser(currentUser);
+      setupUser({
+        currentUser,
+        endPoint: 'login',
+        alertText: 'Login Successful! Redirecting...'
+      });
     } else {
-      registerUser(currentUser);
+      setupUser({
+        currentUser,
+        endPoint: 'register',
+        alertText: 'User Created! Redirecting...'
+      });
     }
   };
   useEffect(() => {
@@ -51,7 +59,6 @@ const Register = () => {
   }, [user, navigate]);
   return (
     <Wrapper className="full-page">
-      {/* all classname are following global classes */}
       <form className="form" onSubmit={onSubmit}>
         <Logo />
         <h3>{values.isMember ? 'Login' : 'Register'}</h3>
@@ -82,7 +89,21 @@ const Register = () => {
         />
 
         <button type="submit" className="btn btn-block" disabled={isLoading}>
-          Submit
+          submit
+        </button>
+        <button
+          type="button"
+          className="btn btn-block btn-hipster"
+          disabled={isLoading}
+          onClick={() => {
+            setupUser({
+              currentUser: { email: 'test@gmail.com', password: 'test123' },
+              endPoint: 'login',
+              alertText: 'Login Successful! Redirecting...'
+            });
+          }}
+        >
+          {isLoading ? 'loading...' : 'demo app'}
         </button>
         <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
