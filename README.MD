@@ -2,7 +2,7 @@
 
 #### Track Your Job Search
 
-Project in Action - [Jobify](https://www.jobify.live/)
+Project in Action - [Jobify](https://live-jobify.onrender.com)
 
 #### Run The App Locally
 
@@ -10,32 +10,6 @@ Project in Action - [Jobify](https://www.jobify.live/)
 - rename .env.temp to .env
 - setup values for - MONGO_URL, JWT_SECRET, JWT_LIFETIME
 - visit url http://localhost:3000/
-
-#### Setup React App
-
-- Create client folder
-- Open terminal, cd terminal
-- npx create-react-app .
-- npm start
-
-#### Boilerplate cleaning
-
-- in src remove
-- App.css
-- App.test.js
-- logo.svg
-- reportWebVitals.js
-- setupTests.js
-- fix App.js and index.js
-
-#### Title and favicon
-
-- navigate to public/index.html
-- look for title in head element
-- changed it to jobify
-- in src/images
-- take the favicon.ico and replace with public/favicon.ico
-- can create your own at [https://favicon.io]
 
 #### Normalize.css and Global Styles
 
