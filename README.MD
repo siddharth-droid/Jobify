@@ -1,7 +1,9 @@
 # Jobify
 
 #### Track Your Job Search
-The server enters a sleep mode when there is no activity on the website, and it may take approximately 10 seconds for the application to initialize from a cold boot state.
+The server enters sleep mode when there is no activity on the website, and it may take approximately 10 seconds for the application to initialize from a cold boot state.
+
+
 Project in Action - [Jobify](https://live-jobify.onrender.com)
 
 #### Run The App Locally
