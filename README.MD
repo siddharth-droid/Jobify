@@ -9,7 +9,7 @@ Project in Action - [Jobify](https://live-jobify.onrender.com)
 #### Run The App Locally
 
 - npm run install-dependencies
-- rename .env.temp to .env
+- create .env file in root folder
 - setup values for - MONGO_URL, JWT_SECRET, JWT_LIFETIME
 - visit url http://localhost:3000/
 
